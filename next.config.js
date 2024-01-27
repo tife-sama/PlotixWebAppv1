@@ -1,6 +1,6 @@
 const nextConfig = {
   images: {
-    domains: ['utfs.io', 'plotix-web-appv1.vercel.app'],
+    domains: ['utfs.io', '*.vercel.app'],
     remotePatterns: [
       {
         protocol: 'https',
