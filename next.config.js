@@ -1,7 +1,6 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['utfs.io'],
+    domains: ['utfs.io', 'plotix-web-appv1.vercel.app'],
     remotePatterns: [
       {
         protocol: 'https',
