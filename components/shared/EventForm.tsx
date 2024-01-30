@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { eventFormSchema } from "@/lib/validator"
+import { coachFormSchema } from "@/lib/validator"
 import * as z from 'zod'
 import { eventDefaultValues } from "@/constants"
 import Dropdown from "./Dropdown"
@@ -23,14 +23,14 @@ import { createEvent, updateEvent } from "@/lib/actions/event.actions"
 import { IEvent } from "@/lib/database/models/event.model"
 
 
-type EventFormProps = {
+type CoachFormProps = {
   userId: string
   type: "Create" | "Update"
   event?: IEvent,
   eventId?: string
 }
 
-const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
+const CoachForm = ({ userId, type, event, eventId }: CoachFormProps) => {
   const [files, setFiles] = useState<File[]>([])
   const initialValues = event && type === 'Update' 
     ? { 
@@ -43,12 +43,12 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
 
   const { startUpload } = useUploadThing('imageUploader')
 
-  const form = useForm<z.infer<typeof eventFormSchema>>({
-    resolver: zodResolver(eventFormSchema),
+  const form = useForm<z.infer<typeof coachFormSchema>>({
+    resolver: zodResolver(coachFormSchema),
     defaultValues: initialValues
   })
  
-  async function onSubmit(values: z.infer<typeof eventFormSchema>) {
+  async function onSubmit(values: z.infer<typeof coachFormSchema>) {
     let uploadedImageUrl = values.imageUrl;
 
     if(files.length > 0) {
@@ -138,7 +138,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormControl className="h-72">
-                    <Textarea placeholder="Description" {...field} className="textarea rounded-2xl" />
+                    <Textarea placeholder="About me" {...field} className="textarea rounded-2xl" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -332,4 +332,4 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
   )
 }
 
-export default EventForm
+export default CoachForm
