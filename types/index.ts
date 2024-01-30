@@ -99,9 +99,9 @@ export type Event = {
 }
 
 // ====== CATEGORY PARAMS
-export type CreateCategoryParams = {
-  categoryName: string
-}
+// export type CreateCategoryParams = {
+//   categoryName: number
+// }
 
 // ====== ORDER PARAMS
 export type CheckoutOrderParams = {
