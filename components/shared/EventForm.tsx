@@ -1,13 +1,13 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useForm, useFieldArray } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { coachFormSchema } from "@/lib/validator"
+import { categoryArea, coachFormSchema } from "@/lib/validator"
 import * as z from 'zod'
-import { eventDefaultValues } from "@/constants"
+import { coachDefaultValues } from "@/constants"
 import Dropdown from "./Dropdown"
 import { Textarea } from "@/components/ui/textarea"
 import { FileUploader } from "./FileUploader"
@@ -21,6 +21,8 @@ import { Checkbox } from "../ui/checkbox"
 import { useRouter } from "next/navigation"
 import { createEvent, updateEvent } from "@/lib/actions/event.actions"
 import { IEvent } from "@/lib/database/models/event.model"
+import { VideoUploader } from "./videoUploader"
+import WorkExperienceForm from "./WorkExperienceForm"
 
 
 type CoachFormProps = {
@@ -30,6 +32,7 @@ type CoachFormProps = {
   eventId?: string
 }
 
+
 const CoachForm = ({ userId, type, event, eventId }: CoachFormProps) => {
   const [files, setFiles] = useState<File[]>([])
   const initialValues = event && type === 'Update' 
@@ -38,7 +41,7 @@ const CoachForm = ({ userId, type, event, eventId }: CoachFormProps) => {
       startDateTime: new Date(event.startDateTime), 
       endDateTime: new Date(event.endDateTime) 
     }
-    : eventDefaultValues;
+    : coachDefaultValues;
   const router = useRouter();
 
   const { startUpload } = useUploadThing('imageUploader')
@@ -104,47 +107,8 @@ const CoachForm = ({ userId, type, event, eventId }: CoachFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
-        <div className="flex flex-col gap-5 md:flex-row">
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormControl>
-                  <Input placeholder="Event title" {...field} className="input-field" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="categoryId"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormControl>
-                  <Dropdown onChangeHandler={field.onChange} value={field.value} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="flex flex-col gap-5 md:flex-row">
-          <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormControl className="h-72">
-                    <Textarea placeholder="About me" {...field} className="textarea rounded-2xl" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          <FormField
+      <div className="flex justify-center items-center h-full">
+      <FormField
               control={form.control}
               name="imageUrl"
               render={({ field }) => (
@@ -160,8 +124,101 @@ const CoachForm = ({ userId, type, event, eventId }: CoachFormProps) => {
                 </FormItem>
               )}
             />
+            </div>
+        <div className="flex flex-col gap-5 md:flex-row">
+          
+          <FormField
+            control={form.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormControl>
+                  <Input placeholder="First Name" {...field} className="input-field" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormControl>
+                  <Input placeholder="Last Name" {...field} className="input-field" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="headline"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormControl>
+                  <Input placeholder="Headline" {...field} className="input-field" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        <FormField
+  control={form.control}
+  name="specializations" // corrected spelling from "specilisations"
+  render={({ field }) => (
+    <FormItem className="w-full">
+      <FormControl>
+        <Dropdown
+          options={categoryArea} // Replace with your actual array of specializations
+          onChangeHandler={field.onChange}
+          value={field.value}
+          defaultValue="Category" // Add this line for the placeholder
+        />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  )}
+  
+/>
+
         </div>
 
+        <div className="flex flex-col gap-5 md:flex-row">
+          <FormField
+              control={form.control}
+              name="aboutMe"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl className="h-72">
+                    <Textarea placeholder="About me" {...field} className="textarea rounded-2xl" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+        {/* <WorkExperienceForm /> */}
+          
+        </div>
+                hi
+        
+        <FormField
+              control={form.control}
+              name="videoUrl"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl className="h-72">
+                    <VideoUploader
+                      onFieldChange={field.onChange}
+                      videoUrl={field.value}
+                      setFiles={setFiles}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
         <div className="flex flex-col gap-5 md:flex-row">
           <FormField
               control={form.control}
@@ -254,7 +311,7 @@ const CoachForm = ({ userId, type, event, eventId }: CoachFormProps) => {
         <div className="flex flex-col gap-5 md:flex-row">
             <FormField
               control={form.control}
-              name="price"
+              name="rate"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormControl>
@@ -266,7 +323,7 @@ const CoachForm = ({ userId, type, event, eventId }: CoachFormProps) => {
                         height={24}
                         className="filter-grey"
                       />
-                      <Input type="number" placeholder="Price" {...field} className="p-regular-16 border-0 bg-grey-50 outline-offset-0 focus:border-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                      <Input type="number" placeholder="Hourly Rate" {...field} className="p-regular-16 border-0 bg-grey-50 outline-offset-0 focus:border-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
                       <FormField
                         control={form.control}
                         name="isFree"

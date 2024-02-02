@@ -72,7 +72,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
       <section className="py-20 mx-auto text-center flex flex-col items-center max-w-3xl">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
            Where Writers Everywhere {" "}
-            <span className="text-violet-700">Level Up.</span>
+            <span className="text-violet-700">Level Up!</span>
 
           </h1>
           <p className="mt-6 text-lg max-w-prose text-muted-foreground">
