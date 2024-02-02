@@ -1,11 +1,21 @@
-"use server";
+"use server"
 
-import { handleError } from "../utils";
-import { connectToDatabase } from "../database";
-import Category from "../database/models/category.model";
+import { CreateCategoryParams } from "@/types"
+import { handleError } from "../utils"
+import { connectToDatabase } from "../database"
+import Category from "../database/models/category.model"
 
-// Define your categories
-const categoriesArray = ["Journalism", "Comic", "Manga", /* Add more categories as needed */];
+export const createCategory = async ({ categoryName }: CreateCategoryParams) => {
+  try {
+    await connectToDatabase();
+
+    const newCategory = await Category.create({ name: categoryName });
+
+    return JSON.parse(JSON.stringify(newCategory));
+  } catch (error) {
+    handleError(error)
+  }
+}
 
 export const getAllCategories = async () => {
   try {
@@ -13,17 +23,8 @@ export const getAllCategories = async () => {
 
     const categories = await Category.find();
 
-    // Filter out categories not in categoriesArray
-    const filteredCategories = categories.filter(category => categoriesArray.includes(category.name));
-
-    return JSON.parse(JSON.stringify(filteredCategories));
+    return JSON.parse(JSON.stringify(categories));
   } catch (error) {
-    handleError(error);
+    handleError(error)
   }
-};
-
-export const getPredefinedCategories = () => {
-  return categoriesArray;
-};
-
-export { categoriesArray}
+}
